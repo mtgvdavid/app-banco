@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput, Switch } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function App() {
@@ -20,6 +20,7 @@ function AppContent() {
 
   const [sexo, setSexo] = useState('feminino');
   const [valor, setValor] = useState(0);
+  const [estudante, setBool] = useState(false);
 
   return (
     <View style={[styles.container, { paddingTop: safeAreaInsets.top + 20 }]}>
@@ -63,6 +64,11 @@ function AppContent() {
           minimumTrackTintColor="#87CEEB"
           thumbTintColor="#87CEEB"
         />
+        <View style={styles.switch}>
+          <Text style={styles.subtitle}>É estudante?</Text>
+          <Switch value={estudante} onValueChange={(itemValue: boolean) => setBool(itemValue)} />
+        </View>
+
       </View>
     </View>
   );
@@ -122,6 +128,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
+  switch: {
+    alignItems: 'center',     
+    justifyContent: 'center', 
+    marginVertical: 20,
+  }
 });
 
 export default App;
