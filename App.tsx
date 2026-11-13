@@ -1,16 +1,8 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Picker } from '@react-native-picker/picker';
+import Slider from '@react-native-community/slider';
+import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -26,12 +18,52 @@ function App() {
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
 
+  const [sexo, setSexo] = useState('feminino');
+  const [valor, setValor] = useState(0);
+
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
+    <View style={[styles.container, { paddingTop: safeAreaInsets.top + 20 }]}>
+      <View style={styles.content}>
+        <Text style={styles.title}>byron.bank</Text>
+        <Text style={styles.subtitle}>Insira suas informações</Text>
+
+        <TextInput 
+          style={styles.input} 
+          placeholder="Seu nome..." 
+          placeholderTextColor="#888"
+        />
+
+        <TextInput 
+          style={styles.input} 
+          placeholder="Sua idade..." 
+          placeholderTextColor="#888"
+          keyboardType="numeric"
+        />
+
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={sexo}
+            onValueChange={(itemValue: string) => setSexo(itemValue)}
+            style={styles.picker}
+            dropdownIconColor="#000000"
+          >
+            <Picker.Item label="Masculino" value="masculino" color="#000000" />
+            <Picker.Item label="Feminino" value="feminino" color="#000000" />
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>Limite desejado: R$ {valor.toFixed(0)}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={1000}
+          step={50}
+          value={valor}
+          onValueChange={setValor}
+          minimumTrackTintColor="#87CEEB"
+          thumbTintColor="#87CEEB"
+        />
+      </View>
     </View>
   );
 }
@@ -39,6 +71,56 @@ function AppContent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+  },
+  content: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#87CEEB',
+    textAlign: 'center', // Centraliza apenas o texto do título
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#555555',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  input: {
+    width: '100%',
+    height: 48,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 16,
+    color: '#000000',
+  },
+  pickerContainer: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    borderRadius: 8,
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+  picker: {
+    width: '100%',
+    height: 55,
+    color: '#000000',
+  },
+  label: {
+    fontSize: 16,
+    color: '#333333',
+    marginBottom: 8,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
   },
 });
 
