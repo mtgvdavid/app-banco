@@ -1,84 +1,18 @@
 import React, { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput, Switch, TouchableOpacity} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  useColorScheme,
+  View,
+  Text,
+  TextInput,
+  Switch,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  const [nome, setNome] = useState('Matheus');
-  const [idade, setIdade] = useState(19);
-  const [sexo, setSexo] = useState('feminino');
-  const [valor, setValor] = useState(0);
-  const [estudante, setBool] = useState(false);
-
-  return (
-    <View style={[styles.container, { paddingTop: safeAreaInsets.top + 20 }]}>
-      <View style={styles.content}>
-        <Text style={styles.title}>byron.bank</Text>
-        <Text style={styles.subtitle}>Insira suas informações</Text>
-
-        <TextInput 
-          style={styles.input} 
-          placeholder="Seu nome..." 
-          placeholderTextColor="#888"
-          onChangeText={(textoDigitado) => setNome(textoDigitado)}
-        />
-
-        <TextInput 
-          style={styles.input} 
-          placeholder="Sua idade..." 
-          placeholderTextColor="#888"
-          keyboardType="numeric"
-          onChangeText={(textoDigitado) => setIdade(Number(textoDigitado))}
-        />
-
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={sexo}
-            onValueChange={(itemValue: string) => setSexo(itemValue)}
-            style={styles.picker}
-            dropdownIconColor="#000000"
-          >
-            <Picker.Item label="Masculino" value="masculino" color="#000000" />
-            <Picker.Item label="Feminino" value="feminino" color="#000000" />
-          </Picker>
-        </View>
-
-        <Text style={styles.label}>Limite desejado: R$ {valor.toFixed(0)}</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={1000}
-          step={50}
-          value={valor}
-          onValueChange={setValor}
-          minimumTrackTintColor="#87CEEB"
-          thumbTintColor="#87CEEB"
-        />
-        <View style={styles.switch}>
-          <Text style={styles.subtitle}>É estudante?</Text>
-          <Switch value={estudante} onValueChange={(itemValue: boolean) => setBool(itemValue)} />
-        </View>
-
-        
-
-      </View>
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -94,7 +28,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     color: '#87CEEB',
-    textAlign: 'center', // Centraliza apenas o texto do título
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
@@ -135,10 +69,112 @@ const styles = StyleSheet.create({
     height: 40,
   },
   switch: {
-    alignItems: 'center',     
-    justifyContent: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 20,
-  }
+  },
+  button: {
+    width: '50%',
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: '#CCCCCC',
+    paddingVertical: 12,
+    marginTop: 12,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#000000',
+    fontWeight: 'bold',
+  },
 });
 
+function App() {
+  const isDarkMode = useColorScheme() === 'dark';
+
+  return (
+    <SafeAreaProvider>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <AppContent />
+    </SafeAreaProvider>
+  );
+}
+
+function AppContent() {
+  const safeAreaInsets = useSafeAreaInsets();
+  const [nome, setNome] = useState('Matheus');
+  const [idade, setIdade] = useState(19);
+  const [sexo, setSexo] = useState('feminino');
+  const [valor, setValor] = useState(0);
+  const [estudante, setEstudante] = useState(false);
+
+  function mostrarAlerta() {
+    Alert.alert(
+      `Seja bem-vindo ${nome}! Idade: ${idade}`, // Troque ' por ` aqui
+      `Seu limite inicial no byron.bank é de R$ ${valor}.\nSexo: ${sexo}\nEstudante: ${estudante ? 'Sim' : 'Não'}`
+    );
+  }
+
+
+  return (
+    <View style={[styles.container, { paddingTop: safeAreaInsets.top + 20 }]}>
+      <View style={styles.content}>
+        <Text style={styles.title}>byron.bank</Text>
+        <Text style={styles.subtitle}>Insira suas informações</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Seu nome..."
+          placeholderTextColor="#888"
+          value={nome}
+          onChangeText={setNome}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Sua idade..."
+          placeholderTextColor="#888"
+          keyboardType="numeric"
+          value={String(idade)}
+          onChangeText={(textoDigitado) => setIdade(Number(textoDigitado) || 0)}
+        />
+
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={sexo}
+            onValueChange={(itemValue: string) => setSexo(itemValue)}
+            style={styles.picker}
+            dropdownIconColor="#000000"
+          >
+            <Picker.Item label="Masculino" value="masculino" color="#000000" />
+            <Picker.Item label="Feminino" value="feminino" color="#000000" />
+          </Picker>
+        </View>
+
+        <Text style={styles.label}>Limite desejado: R$ {valor.toFixed(0)}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={1000}
+          step={50}
+          value={valor}
+          onValueChange={setValor}
+          minimumTrackTintColor="#87CEEB"
+          thumbTintColor="#87CEEB"
+        />
+
+        <View style={styles.switch}>
+          <Text style={styles.subtitle}>É estudante?</Text>
+          <Switch value={estudante} onValueChange={setEstudante} />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={mostrarAlerta}>
+          <Text style={styles.buttonText}>Criar conta</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
 export default App;
+
