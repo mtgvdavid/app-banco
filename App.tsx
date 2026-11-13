@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
-import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput, Switch } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme, View, Text, TextInput, Switch, TouchableOpacity} from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function App() {
@@ -18,6 +18,8 @@ function App() {
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
 
+  const [nome, setNome] = useState('Matheus');
+  const [idade, setIdade] = useState(19);
   const [sexo, setSexo] = useState('feminino');
   const [valor, setValor] = useState(0);
   const [estudante, setBool] = useState(false);
@@ -32,6 +34,7 @@ function AppContent() {
           style={styles.input} 
           placeholder="Seu nome..." 
           placeholderTextColor="#888"
+          onChangeText={(textoDigitado) => setNome(textoDigitado)}
         />
 
         <TextInput 
@@ -39,6 +42,7 @@ function AppContent() {
           placeholder="Sua idade..." 
           placeholderTextColor="#888"
           keyboardType="numeric"
+          onChangeText={(textoDigitado) => setIdade(Number(textoDigitado))}
         />
 
         <View style={styles.pickerContainer}>
@@ -68,6 +72,8 @@ function AppContent() {
           <Text style={styles.subtitle}>É estudante?</Text>
           <Switch value={estudante} onValueChange={(itemValue: boolean) => setBool(itemValue)} />
         </View>
+
+        
 
       </View>
     </View>
